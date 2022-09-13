@@ -13,6 +13,7 @@
 #include <sys/sysinfo.h>
 #include <unistd.h>
 
+
 int main(void)
 {
     printf("Uptime server version 0.1\n");
@@ -38,6 +39,15 @@ int main(void)
     }
 
     printf("sa_data: %s %d\n", res->ai_addr->sa_data, res->ai_addrlen);
+
+    if (bind(sfd, res->ai_addr, res->ai_addrlen) != 0) {
+        perror("bind()");
+        close(sfd);
+        freeaddrinfo(res);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("sa_data: %s\n", res->ai_addr->sa_data);
 
     freeaddrinfo(res);
 
